@@ -1,0 +1,12 @@
+trial,fase,period_id,stageA_img_1,stageA_img_2,stageA_img_3,stageA_img_4,stageB_img_1,stageB_img_2,correct_b1,correct_b2,b1_acr1,b1_acr2,b2_acr1,b2_acr2,stageC_img_P,stageC_img_Q,stageC_img_PQ
+25,2,1YTD,stageA_25_1.png,stageA_25_2.png,stageA_25_3.png,stageA_25_4.png,stageB_es_25_1.png,stageB_es_25_2.png,False,True,ROI,EPS,SRI,SASB,1YTD_P.png,1YTD_Q.png,1YTD_PQ.png
+26,2,P16,stageA_26_1.png,stageA_26_2.png,stageA_26_3.png,stageA_26_4.png,stageB_es_26_1.png,stageB_es_26_2.png,True,False,NAV,P/E,EPS,ROI,P16_P.png,P16_Q.png,P16_PQ.png
+27,2,P20,stageA_27_1.png,stageA_27_2.png,stageA_27_3.png,stageA_27_4.png,stageB_es_27_1.png,stageB_es_27_2.png,False,False,EPS,AUM,YTD,ESG,P20_P.png,P20_Q.png,P20_PQ.png
+28,2,5YTD,stageA_28_1.png,stageA_28_2.png,stageA_28_3.png,stageA_28_4.png,stageB_es_28_1.png,stageB_es_28_2.png,True,False,SASB,WACC,YTD,SDG,5YTD_P.png,5YTD_Q.png,5YTD_PQ.png
+29,2,P24,stageA_29_1.png,stageA_29_2.png,stageA_29_3.png,stageA_29_4.png,stageB_es_29_1.png,stageB_es_29_2.png,False,True,SASB,ROI,SFDR,PRI,P24_P.png,P24_Q.png,P24_PQ.png
+30,2,P28,stageA_30_1.png,stageA_30_2.png,stageA_30_3.png,stageA_30_4.png,stageB_es_30_1.png,stageB_es_30_2.png,True,False,NAV,IRR,PRI,SASB,P28_P.png,P28_Q.png,P28_PQ.png
+31,2,4YTD,stageA_31_1.png,stageA_31_2.png,stageA_31_3.png,stageA_31_4.png,stageB_es_31_1.png,stageB_es_31_2.png,True,True,GHG,P/E,TCFD,YTD,4YTD_P.png,4YTD_Q.png,4YTD_PQ.png
+32,2,P12,stageA_32_1.png,stageA_32_2.png,stageA_32_3.png,stageA_32_4.png,stageB_es_32_1.png,stageB_es_32_2.png,False,True,SFDR,ESG,YTD,IRR,P12_P.png,P12_Q.png,P12_PQ.png
+33,2,3YTD,stageA_33_1.png,stageA_33_2.png,stageA_33_3.png,stageA_33_4.png,stageB_es_33_1.png,stageB_es_33_2.png,True,True,SASB,PRI,ROE,GRI,3YTD_P.png,3YTD_Q.png,3YTD_PQ.png
+34,2,2YTD,stageA_34_1.png,stageA_34_2.png,stageA_34_3.png,stageA_34_4.png,stageB_es_34_1.png,stageB_es_34_2.png,True,True,TCFD,GHG,NPV,SFDR,2YTD_P.png,2YTD_Q.png,2YTD_PQ.png
+35,2,1YTD,stageA_35_1.png,stageA_35_2.png,stageA_35_3.png,stageA_35_4.png,stageB_es_35_1.png,stageB_es_35_2.png,False,False,SDG,ROE,WACC,TCFD,1YTD_P.png,1YTD_Q.png,1YTD_PQ.png

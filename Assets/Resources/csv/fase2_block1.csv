@@ -1,0 +1,13 @@
+trial,fase,period_id,stageA_img_1,stageA_img_2,stageA_img_3,stageA_img_4,stageB_img_1,stageB_img_2,correct_b1,correct_b2,b1_acr1,b1_acr2,b2_acr1,b2_acr2,stageC_img_P,stageC_img_Q,stageC_img_PQ
+1,2,7YTD,stageA_01_1.png,stageA_01_2.png,stageA_01_3.png,stageA_01_4.png,stageB_es_01_1.png,stageB_es_01_2.png,True,True,GHG,NPV,IRR,SASB,7YTD_P.png,7YTD_Q.png,7YTD_PQ.png
+2,2,P08,stageA_02_1.png,stageA_02_2.png,stageA_02_3.png,stageA_02_4.png,stageB_es_02_1.png,stageB_es_02_2.png,True,False,SASB,YTD,CSR,GHG,P08_P.png,P08_Q.png,P08_PQ.png
+3,2,P13,stageA_03_1.png,stageA_03_2.png,stageA_03_3.png,stageA_03_4.png,stageB_es_03_1.png,stageB_es_03_2.png,False,True,NAV,GHG,SDG,AUM,P13_P.png,P13_Q.png,P13_PQ.png
+4,2,6YTD,stageA_04_1.png,stageA_04_2.png,stageA_04_3.png,stageA_04_4.png,stageB_es_04_1.png,stageB_es_04_2.png,True,False,SDG,P/E,SFDR,GHG,6YTD_P.png,6YTD_Q.png,6YTD_PQ.png
+5,2,P17,stageA_05_1.png,stageA_05_2.png,stageA_05_3.png,stageA_05_4.png,stageB_es_05_1.png,stageB_es_05_2.png,False,False,SFDR,AUM,IRR,NPV,P17_P.png,P17_Q.png,P17_PQ.png
+6,2,P21,stageA_06_1.png,stageA_06_2.png,stageA_06_3.png,stageA_06_4.png,stageB_es_06_1.png,stageB_es_06_2.png,True,False,P/E,ROI,WACC,PRI,P21_P.png,P21_Q.png,P21_PQ.png
+7,2,P25,stageA_07_1.png,stageA_07_2.png,stageA_07_3.png,stageA_07_4.png,stageB_es_07_1.png,stageB_es_07_2.png,False,True,AUM,ROI,CSR,WACC,P25_P.png,P25_Q.png,P25_PQ.png
+8,2,5YTD,stageA_08_1.png,stageA_08_2.png,stageA_08_3.png,stageA_08_4.png,stageB_es_08_1.png,stageB_es_08_2.png,True,True,NAV,ROE,GRI,AUM,5YTD_P.png,5YTD_Q.png,5YTD_PQ.png
+9,2,P09,stageA_09_1.png,stageA_09_2.png,stageA_09_3.png,stageA_09_4.png,stageB_es_09_1.png,stageB_es_09_2.png,False,False,TCFD,YTD,WACC,SRI,P09_P.png,P09_Q.png,P09_PQ.png
+10,2,P14,stageA_10_1.png,stageA_10_2.png,stageA_10_3.png,stageA_10_4.png,stageB_es_10_1.png,stageB_es_10_2.png,False,False,NAV,IRR,SASB,SRI,P14_P.png,P14_Q.png,P14_PQ.png
+11,2,4YTD,stageA_11_1.png,stageA_11_2.png,stageA_11_3.png,stageA_11_4.png,stageB_es_11_1.png,stageB_es_11_2.png,False,True,AUM,NAV,CSR,ESG,4YTD_P.png,4YTD_Q.png,4YTD_PQ.png
+12,2,P18,stageA_12_1.png,stageA_12_2.png,stageA_12_3.png,stageA_12_4.png,stageB_es_12_1.png,stageB_es_12_2.png,True,True,IRR,SDG,EPS,ESG,P18_P.png,P18_Q.png,P18_PQ.png

@@ -1,0 +1,172 @@
+[bienvenida]
+¡Te damos la bienvenida!
+Gracias por participar en este estudio sobre cómo las personas
+prestan atención y toman decisiones de inversión.
+Tu participación es muy valiosa y completamente anónima.
+La actividad tiene varias etapas y dura alrededor de una hora.
+Tendrás pausas en el camino y puedes ir a tu propio ritmo.
+Busca estar cómodo/a y evita las distracciones.
+
+Para continuar, selecciona Continuar con el control.
+
+[preparacion]
+Antes de empezar, acomódate
+• Ponte el visor y ajústalo hasta ver la imagen nítida y cómoda.
+• El visor sigue tu mirada automáticamente.
+• Ponte cómodo/a, pero mantén la cabeza estable durante todo el experimento.
+• Responderás con el control: apunta al botón P o Q y selecciónalo.
+  (P y Q estarán en pantalla; no necesitas mirarlos para responder.)
+• Si tienes dudas, este es un buen momento para preguntar.
+
+Selecciona Continuar con el control.
+
+[instrucciones_calibracion]
+Calibración del seguimiento ocular
+Vamos a calibrar el seguimiento ocular del visor.
+A continuación verás una secuencia de esferas en distintas posiciones.
+¿Qué tienes que hacer?
+• Sigue con la mirada cada esfera mientras esté visible.
+• NO respondas ni uses el control durante la calibración.
+• Mantén la cabeza quieta y la postura cómoda.
+Importante: a partir de aquí empieza el registro del experimento.
+Cuando estés listo/a, selecciona Continuar con el control.
+
+[aviso_practica]
+Antes del experimento: una práctica
+Lo que viene ahora es solo para que te familiarices con la tarea.
+Primero harás una breve práctica, paso a paso,
+para que entiendas cómo funciona todo.
+La práctica no se evalúa: es solo para que te sientas cómodo/a.
+Cuando termines, comenzará el experimento real,
+que tiene dos fases con varias rondas cada una.
+Recuerda responder siempre con los botones P y Q (con el control).
+
+Selecciona Continuar para empezar la práctica.
+
+[instr_practica_f1]
+Práctica · Fase 1 — Parte A
+Mira y memoriza la secuencia de letras que aparecerá,
+una por una, en distintas posiciones.
+
+Selecciona Continuar para comenzar.
+
+[instr_pf1_parteB]
+Práctica · Fase 1 — Parte B
+Verás operaciones aritméticas.
+Decide si el resultado mostrado es correcto.
+P = Verdadero        Q = Falso
+
+Selecciona Continuar.
+
+[instr_pf1_parteC]
+Práctica · Fase 1 — Parte C
+Verás letras otra vez, una a la vez en una posición.
+Indica si esa letra estaba en la secuencia original
+en esa misma posición.
+Estaba ahí → P        No estaba → Q
+
+Selecciona Continuar.
+
+[instr_pf1_segunda]
+Práctica · Fase 1 — ahora completa y seguida
+Ahora harás la Fase 1 completa, igual que recién,
+pero de forma seguida (etapas A, B y C).
+Etapa A: memorizar la posición de 4 letras (aprox. 8 s)
+Etapa B: 4 operaciones — ¿el resultado es correcto?  P = Verdadero · Q = Falso
+Etapa C: 4 letras — ¿estaba en esa posición?  Estaba → P · No estaba → Q
+
+Selecciona Continuar.
+
+[transicion_post_practica]
+Práctica completada
+Has terminado la práctica con éxito.
+Aquí comenzará el experimento real.
+Las fases reales son más largas que la práctica.
+
+Selecciona Continuar para comenzar el experimento.
+
+[instr_fase1]
+Fase 1 — Experimento
+Ahora comienza el experimento real. Son 25 ensayos.
+En cada ensayo verás 4 letras en distintos cuadrantes,
+luego operaciones aritméticas, y al final preguntas
+sobre dónde apareció cada letra.
+Aritmética:  P = Verdadero   |   Q = Falso
+Reconocimiento:  P = Sí apareció   |   Q = No
+Responde con el control. Selecciona Continuar para comenzar.
+
+[instr_fase1_b3]
+Atención — instrucción especial
+En los próximos ensayos, mientras aparecen las letras,
+debes repetir en voz alta "mamma mia" sin parar,
+hasta que empiecen las operaciones aritméticas.
+Esto es parte del estudio. Hazlo en voz alta y de forma continua.
+
+Selecciona Continuar para comenzar.
+
+[instr_transicion_f2]
+Has completado la Fase 1
+Antes de la Fase 2 vamos a recalibrar el seguimiento ocular
+para mantener la precisión. Solo debes MIRAR las esferas
+que aparezcan, sin responder.
+Mantén la cabeza estable con el visor puesto.
+
+Selecciona Continuar para recalibrar.
+
+[instr_practica_f2]
+Práctica · Fase 2 — Parte A
+Mira atentamente la secuencia de acrónimos.
+Solo obsérvalos.
+
+Selecciona Continuar para comenzar.
+
+[instr_pf2_parteB]
+Práctica · Fase 2 — Parte B
+Ahora verás una afirmación sobre dos activos y sus
+retornos (monetario y no monetario, la métrica ASG).
+Decide si es verdadera o falsa.
+P = Verdadero        Q = Falso
+
+Selecciona Continuar.
+
+[instr_pf2_parteC]
+Práctica · Fase 2 — Parte C
+Verás el activo P un momento, luego el Q,
+y al final ambos juntos.
+Cuando estén juntos, decide en cuál inviertes.
+Eliges P → P        Eliges Q → Q
+
+Selecciona Continuar.
+
+[instr_pf2_segunda]
+Práctica · Fase 2 — ahora completa y seguida
+Ahora harás la Fase 2 completa, igual que recién,
+pero de forma seguida (etapas A, B y C).
+Etapa A: memorizar 4 acrónimos de activos (aprox. 8 s)
+Etapa B: 2 afirmaciones — ¿verdadera o falsa?  P = Verdadero · Q = Falso
+Etapa C: mira el activo P, luego el Q, y elige uno
+  (P y Q solos ~3,5 s; decisión hasta 10 s)
+
+Selecciona Continuar.
+
+[instr_fase2]
+Fase 2 — Experimento
+Son 35 ensayos. Verás 4 acrónimos en cuadrantes,
+luego afirmaciones de razonamiento económico,
+y al final una decisión entre dos activos: P y Q.
+Razonamiento:  P = Verdadero   |   Q = Falso
+Decisión:  P = elijo Activo P   |   Q = elijo Activo Q
+Observa con atención el gráfico antes de decidir.
+Selecciona Continuar para comenzar.
+
+[recal_rapida_intro]
+Recalibración rápida
+Sigue con la mirada las esferas que aparezcan.
+No respondas durante la recalibración.
+
+Selecciona Continuar.
+
+[pantalla_fin]
+Listo, se guardaron todos los resultados.
+Muchas gracias por tu participación.
+Ya puedes quitarte el visor.

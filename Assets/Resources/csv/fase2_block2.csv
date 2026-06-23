@@ -1,0 +1,13 @@
+trial,fase,period_id,stageA_img_1,stageA_img_2,stageA_img_3,stageA_img_4,stageB_img_1,stageB_img_2,correct_b1,correct_b2,b1_acr1,b1_acr2,b2_acr1,b2_acr2,stageC_img_P,stageC_img_Q,stageC_img_PQ
+13,2,P22,stageA_13_1.png,stageA_13_2.png,stageA_13_3.png,stageA_13_4.png,stageB_es_13_1.png,stageB_es_13_2.png,False,True,GRI,AUM,ROI,SRI,P22_P.png,P22_Q.png,P22_PQ.png
+14,2,P26,stageA_14_1.png,stageA_14_2.png,stageA_14_3.png,stageA_14_4.png,stageB_es_14_1.png,stageB_es_14_2.png,False,True,SFDR,GHG,TCFD,P/E,P26_P.png,P26_Q.png,P26_PQ.png
+15,2,3YTD,stageA_15_1.png,stageA_15_2.png,stageA_15_3.png,stageA_15_4.png,stageB_es_15_1.png,stageB_es_15_2.png,False,True,GHG,IRR,SFDR,TCFD,3YTD_P.png,3YTD_Q.png,3YTD_PQ.png
+16,2,P10,stageA_16_1.png,stageA_16_2.png,stageA_16_3.png,stageA_16_4.png,stageB_es_16_1.png,stageB_es_16_2.png,True,False,ROI,CSR,ESG,SDG,P10_P.png,P10_Q.png,P10_PQ.png
+17,2,7YTD,stageA_17_1.png,stageA_17_2.png,stageA_17_3.png,stageA_17_4.png,stageB_es_17_1.png,stageB_es_17_2.png,True,True,SRI,EPS,SASB,P/E,7YTD_P.png,7YTD_Q.png,7YTD_PQ.png
+18,2,P15,stageA_18_1.png,stageA_18_2.png,stageA_18_3.png,stageA_18_4.png,stageB_es_18_1.png,stageB_es_18_2.png,False,False,ROE,SFDR,ESG,IRR,P15_P.png,P15_Q.png,P15_PQ.png
+19,2,P19,stageA_19_1.png,stageA_19_2.png,stageA_19_3.png,stageA_19_4.png,stageB_es_19_1.png,stageB_es_19_2.png,False,True,NAV,TCFD,WACC,GHG,P19_P.png,P19_Q.png,P19_PQ.png
+20,2,2YTD,stageA_20_1.png,stageA_20_2.png,stageA_20_3.png,stageA_20_4.png,stageB_es_20_1.png,stageB_es_20_2.png,False,True,ROI,WACC,P/E,SRI,2YTD_P.png,2YTD_Q.png,2YTD_PQ.png
+21,2,P23,stageA_21_1.png,stageA_21_2.png,stageA_21_3.png,stageA_21_4.png,stageB_es_21_1.png,stageB_es_21_2.png,False,True,P/E,SRI,WACC,ROI,P23_P.png,P23_Q.png,P23_PQ.png
+22,2,P27,stageA_22_1.png,stageA_22_2.png,stageA_22_3.png,stageA_22_4.png,stageB_es_22_1.png,stageB_es_22_2.png,False,False,ROE,GHG,SASB,EPS,P27_P.png,P27_Q.png,P27_PQ.png
+23,2,6YTD,stageA_23_1.png,stageA_23_2.png,stageA_23_3.png,stageA_23_4.png,stageB_es_23_1.png,stageB_es_23_2.png,True,True,IRR,SFDR,EPS,SDG,6YTD_P.png,6YTD_Q.png,6YTD_PQ.png
+24,2,P11,stageA_24_1.png,stageA_24_2.png,stageA_24_3.png,stageA_24_4.png,stageB_es_24_1.png,stageB_es_24_2.png,False,False,YTD,CSR,P/E,GHG,P11_P.png,P11_Q.png,P11_PQ.png
