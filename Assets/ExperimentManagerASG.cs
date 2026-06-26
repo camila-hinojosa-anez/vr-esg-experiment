@@ -67,6 +67,12 @@ public class ExperimentManagerASG : MonoBehaviour
     public float imageWidth = 1.5f;       // antes 1.5
     public float imageHeight = 1.125f;     // antes 1.5  -> 4:3 (1.5 * 768/1024)
 
+    [Header("Fix titileo (separacion de capas UI en metros mundo)")]
+    public bool fixUiDepthLayering = true;
+    public float textDepthOffset = 0.008f;    // texto de instrucciones (8 mm)
+    public float imageDepthOffset = 0.010f;   // imagen del estimulo (10 mm) — la mas importante de ver nitida
+    public float buttonDepthOffset = 0.014f;  // botones por delante de imagen y texto (14 mm)
+
     public const string EXPERIMENT_VERSION = "VR_ASG_A1";
 
     // ---- estado interno ----
@@ -96,6 +102,7 @@ public class ExperimentManagerASG : MonoBehaviour
         meta.experiment_version = EXPERIMENT_VERSION;
         meta.timestamp_start = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss");
         LoadInstructions();
+        FixUIDepthLayering();
         StartCoroutine(RunExperiment());
     }
 
@@ -242,7 +249,7 @@ public class ExperimentManagerASG : MonoBehaviour
             {
                 string recalLabel; int afterT;
                 if (fase == 1) { recalLabel = (b == 0) ? "recal_1" : "recal_2"; afterT = (b == 0) ? 10 : 20; }
-                else           { recalLabel = (b == 0) ? "recal_4" : "recal_5"; afterT = (b == 0) ? 37 : 49; }
+                else { recalLabel = (b == 0) ? "recal_4" : "recal_5"; afterT = (b == 0) ? 37 : 49; }
                 yield return StartCoroutine(ShowInstr("recal_rapida_intro", "Recalibracion - mira los puntos"));
                 yield return StartCoroutine(Calibrate(false, recalLabel, 5, afterT));
             }
@@ -492,10 +499,10 @@ public class ExperimentManagerASG : MonoBehaviour
         if (pointCount == 5)
         {
             pts.Add(imageCenter);                              // centro
-            pts.Add(imageCenter + new Vector3(-hx,  hy, 0));   // sup izq
-            pts.Add(imageCenter + new Vector3( hx,  hy, 0));   // sup der
+            pts.Add(imageCenter + new Vector3(-hx, hy, 0));   // sup izq
+            pts.Add(imageCenter + new Vector3(hx, hy, 0));   // sup der
             pts.Add(imageCenter + new Vector3(-hx, -hy, 0));   // inf izq
-            pts.Add(imageCenter + new Vector3( hx, -hy, 0));   // inf der
+            pts.Add(imageCenter + new Vector3(hx, -hy, 0));   // inf der
         }
         else if (pointCount == 16)
         {
@@ -513,7 +520,7 @@ public class ExperimentManagerASG : MonoBehaviour
         else // 9 -> grilla 3x3
         {
             float[] xs = { -hx, 0f, hx };
-            float[] ys = {  hy, 0f, -hy };
+            float[] ys = { hy, 0f, -hy };
             foreach (float y in ys)
                 foreach (float x in xs)
                     pts.Add(imageCenter + new Vector3(x, y, 0));
@@ -625,6 +632,71 @@ public class ExperimentManagerASG : MonoBehaviour
     {
         if (buttonP != null) buttonP.SetActive(on);
         if (buttonQ != null) buttonQ.SetActive(on);
+    }
+
+    // =====================================================================
+    //  FIX TITILEO / Z-FIGHTING  (capas UI coplanares en z=0 del Canvas World Space)
+    //  Todo el UI nace en z local 0, asi que estimulo, texto y fondo del panel
+    //  quedan en el mismo plano y "pelean" por la profundidad. Esto adelanta cada
+    //  capa unos milimetros hacia el observador. Corre una sola vez en Start.
+    // =====================================================================
+    private void FixUIDepthLayering()
+    {
+        if (!fixUiDepthLayering) return;
+
+        // Escala uniforme del Canvas World Space (z = x). Como todo esta en z local 0,
+        // esto NO mueve ningun elemento; solo quita la anisotropia (0.003,0.003,1) que
+        // hace temblar el SDF de TMP.
+        Canvas c = (panelMessage != null) ? panelMessage.GetComponentInParent<Canvas>() : null;
+        if (c != null && c.renderMode == RenderMode.WorldSpace)
+        {
+            Vector3 s = c.transform.localScale;
+            if (!Mathf.Approximately(s.z, s.x))
+                c.transform.localScale = new Vector3(s.x, s.y, s.x);
+        }
+
+        // --- Texto de instrucciones ---
+        NudgeTowardViewer(textActivity != null ? textActivity.transform : null, textDepthOffset);
+        NudgeTowardViewer(finishText != null ? finishText.transform : null, textDepthOffset);
+        if (calibrationInstructionsPanel != null)
+        {
+            var t = calibrationInstructionsPanel.GetComponentInChildren<TMP_Text>(true);
+            if (t != null) NudgeTowardViewer(t.transform, textDepthOffset);
+        }
+
+        // --- Imagen del estimulo (la que MAS debe verse nitida) ---
+        NudgeTowardViewer(imageComponent != null ? imageComponent.transform : null, imageDepthOffset);
+
+        // --- Botones P / Q (por delante de la imagen) ---
+        NudgeTowardViewer(buttonP != null ? buttonP.transform : null, buttonDepthOffset);
+        NudgeTowardViewer(buttonQ != null ? buttonQ.transform : null, buttonDepthOffset);
+
+        // --- Boton Continuar (hijo de PanelMessage) ---
+        if (panelMessage != null)
+        {
+            Transform cont = panelMessage.transform.Find("botonContinuar");
+            if (cont == null)
+            {
+                // fallback: primer Button bajo el panel
+                var b = panelMessage.GetComponentInChildren<Button>(true);
+                if (b != null) cont = b.transform;
+            }
+            if (cont != null) NudgeTowardViewer(cont, buttonDepthOffset);
+        }
+
+        // --- Boton Terminar (pantalla final) ---
+        NudgeTowardViewer(botonTerminar != null ? botonTerminar.transform : null, buttonDepthOffset);
+    }
+
+    // Mueve el transform unos milimetros hacia la camara. Usa la camara real (a prueba
+    // de orientacion); si no la encuentra, cae a -forward del propio elemento.
+    private void NudgeTowardViewer(Transform t, float meters)
+    {
+        if (t == null) return;
+        Camera cam = Camera.main;
+        Vector3 dir = (cam != null) ? (cam.transform.position - t.position).normalized
+                                    : -t.forward;
+        t.position += dir * meters;
     }
 
     // =====================================================================
