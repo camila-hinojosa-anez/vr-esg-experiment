@@ -51,6 +51,10 @@ public class ExperimentManagerASG : MonoBehaviour
     public GameObject calibrationSphere;   // esfera de calibración (prefab/objeto)
     public GameObject botonTerminar;
     public GameObject finishText;
+    public TMP_Text progressText;          // NUEVO: muestra "Fase X · Ensayo N de M" (opcional; si es null se omite)
+
+    [Header("Sesion / enlace con la encuesta")]
+    public string studyId = "";            // ID del participante; se guarda en meta y en el nombre del archivo para unir con la encuesta del computador
 
     [Header("Flags de ejecución (para pruebas)")]
     public bool runCalibration = true;     // false = saltar la calibración larga al testear
@@ -72,6 +76,19 @@ public class ExperimentManagerASG : MonoBehaviour
     public float textDepthOffset = 0.008f;    // texto de instrucciones (8 mm)
     public float imageDepthOffset = 0.010f;   // imagen del estimulo (10 mm) — la mas importante de ver nitida
     public float buttonDepthOffset = 0.014f;  // botones por delante de imagen y texto (14 mm)
+
+    [Header("Estilo de instrucciones (front)")]
+    public bool styleInstructions = true;     // alinea a la izquierda y da aire entre lineas/parrafos
+
+    [Header("Tiempos de calibracion (segundos por punto)")]
+    // Total por punto = calSettle + calRecord + calTail + calGap.
+    // Valores actuales: 0.5 + 1.8 + 0.3 + 0.4 = 3.0 s/punto.
+    //   recal rapida (5 pts) = 15 s  (objetivo del protocolo CEC) ; full (9 pts) = 27 s.
+    // Antiguos (lentos): 0.5 + 4.0 + 0.8 + 0.5 = 5.8 s/punto -> recal rapida = 29 s.
+    public float calSettle = 0.5f;   // espera antes de grabar, para que el ojo aterrice en el punto
+    public float calRecord = 1.8f;   // ventana de grabacion del gaze (~130 muestras a 72 Hz)
+    public float calTail = 0.3f;   // cola tras ocultar la esfera
+    public float calGap = 0.4f;   // pausa entre puntos
 
     public const string EXPERIMENT_VERSION = "VR_ASG_A1";
 
@@ -100,9 +117,11 @@ public class ExperimentManagerASG : MonoBehaviour
     {
         expStartRealtime = Time.realtimeSinceStartupAsDouble;
         meta.experiment_version = EXPERIMENT_VERSION;
+        meta.study_id = studyId;
         meta.timestamp_start = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss");
         LoadInstructions();
         FixUIDepthLayering();
+        StyleInstructions();
         StartCoroutine(RunExperiment());
     }
 
@@ -231,18 +250,34 @@ public class ExperimentManagerASG : MonoBehaviour
     // =====================================================================
     private IEnumerator RunPhase(int fase, string[] blockCsvs, bool isPractice = false)
     {
+        // pre-pass: parsear los 3 bloques y contar el total de la fase (para "Ensayo X de Y")
+        var parsed = new List<List<Dictionary<string, string>>>();
+        int phaseTotal = 0;
+        foreach (var csv in blockCsvs)
+        {
+            var r = ParseCsv(csv);
+            parsed.Add(r);
+            int n = (r == null) ? 0 : r.Count;
+            phaseTotal += (trialsPerBlockCap > 0) ? Mathf.Min(trialsPerBlockCap, n) : n;
+        }
+        int phaseIndex = 0;
+
         for (int b = 0; b < blockCsvs.Length; b++)
         {
             // instrucción especial de supresión verbal antes del bloque 3 de Fase 1
             if (fase == 1 && b == 2)
                 yield return StartCoroutine(ShowInstr("instr_fase1_b3", "Repite en voz alta 'mamma mia' sin parar"));
 
-            List<Dictionary<string, string>> rows = ParseCsv(blockCsvs[b]);
+            List<Dictionary<string, string>> rows = parsed[b];
             if (rows == null || rows.Count == 0) { Debug.LogWarning("CSV vacío: " + blockCsvs[b]); continue; }
 
             int cap = (trialsPerBlockCap > 0) ? Mathf.Min(trialsPerBlockCap, rows.Count) : rows.Count;
             for (int i = 0; i < cap; i++)
+            {
+                phaseIndex++;
+                SetProgress($"Fase {fase}   ·   Ensayo {phaseIndex} de {phaseTotal}");
                 yield return StartCoroutine(RunTrial(rows[i], fase, b + 1, isPractice));
+            }
 
             // recalibración rápida entre bloques (no después del último)
             if (doRecalibration && !isPractice && b < blockCsvs.Length - 1)
@@ -329,6 +364,7 @@ public class ExperimentManagerASG : MonoBehaviour
         var trial = NewTrial(row, fase, 0, true);
         EyeTrackingLogger.Instance.ClearSamples();
         EyeTrackingLogger.Instance.trackingActive = true;
+        SetProgress("Práctica");
 
         // Parte A — codificación
         yield return StartCoroutine(ShowInstr($"instr_practica_{pf}", "Practica - Parte A"));
@@ -536,6 +572,7 @@ public class ExperimentManagerASG : MonoBehaviour
         if (imageComponent != null) imageComponent.enabled = false;
         if (fixationCross != null) fixationCross.SetActive(false);
         SetButtons(false);
+        SetProgress("Calibración");
 
         if (waitStart)
         {
@@ -573,22 +610,22 @@ public class ExperimentManagerASG : MonoBehaviour
             });
 
             target_index++;
-            yield return new WaitForSeconds(0.5f);
+            yield return new WaitForSeconds(calGap);
         }
 
         calibrations.Add(segment);
         Debug.Log($"Calibracion '{label}' guardada: {segment.points.Count} puntos.");
     }
 
-    private IEnumerator ShowCalibrationSphere(Vector3 position, float duration = 5f)
+    private IEnumerator ShowCalibrationSphere(Vector3 position)
     {
         GameObject sphere = Instantiate(calibrationSphere, position, Quaternion.identity);
         sphere.SetActive(true);
-        yield return new WaitForSeconds(0.5f);
-        EyeTrackingLogger.Instance.ClearSamples();
-        yield return new WaitForSeconds(duration - 1f);
+        yield return new WaitForSeconds(calSettle);   // que el ojo aterrice en el punto
+        EyeTrackingLogger.Instance.ClearSamples();    // descartar lo capturado durante el aterrizaje
+        yield return new WaitForSeconds(calRecord);   // ventana de grabacion util
         Destroy(sphere);
-        yield return new WaitForSeconds(0.8f);
+        yield return new WaitForSeconds(calTail);
     }
 
     // =====================================================================
@@ -601,6 +638,13 @@ public class ExperimentManagerASG : MonoBehaviour
         if (activityPanel != null) activityPanel.SetActive(false);
         SetButtons(false);
         if (fixationCross != null) fixationCross.SetActive(false);
+        SetProgress("");   // las pantallas de instruccion no muestran contador
+    }
+
+    // Actualiza el texto de progreso (si esta asignado).
+    private void SetProgress(string s)
+    {
+        if (progressText != null) progressText.text = s;
     }
 
     // continueButton.onClick -> este método
@@ -667,6 +711,9 @@ public class ExperimentManagerASG : MonoBehaviour
         // --- Imagen del estimulo (la que MAS debe verse nitida) ---
         NudgeTowardViewer(imageComponent != null ? imageComponent.transform : null, imageDepthOffset);
 
+        // --- Texto de progreso ---
+        NudgeTowardViewer(progressText != null ? progressText.transform : null, textDepthOffset);
+
         // --- Botones P / Q (por delante de la imagen) ---
         NudgeTowardViewer(buttonP != null ? buttonP.transform : null, buttonDepthOffset);
         NudgeTowardViewer(buttonQ != null ? buttonQ.transform : null, buttonDepthOffset);
@@ -697,6 +744,27 @@ public class ExperimentManagerASG : MonoBehaviour
         Vector3 dir = (cam != null) ? (cam.transform.position - t.position).normalized
                                     : -t.forward;
         t.position += dir * meters;
+    }
+
+    // =====================================================================
+    //  ESTILO DE INSTRUCCIONES  (mejoras visuales seguras, sin depender de la escala)
+    //  Para mas estilo (fuente, tamano, margenes, panel redondeado) ajustar en el editor.
+    // =====================================================================
+    private void StyleInstructions()
+    {
+        if (!styleInstructions) return;
+        ApplyTextStyle(textActivity);
+        if (finishText != null) ApplyTextStyle(finishText.GetComponent<TMP_Text>());
+        if (calibrationInstructionsPanel != null)
+            ApplyTextStyle(calibrationInstructionsPanel.GetComponentInChildren<TMP_Text>(true));
+    }
+
+    private void ApplyTextStyle(TMP_Text t)
+    {
+        if (t == null) return;
+        t.alignment = TextAlignmentOptions.TopLeft; // izquierda + arriba se lee mejor que centrado
+        t.lineSpacing = 12f;       // +12% de aire entre lineas (porcentaje: independiente de la escala)
+        t.paragraphSpacing = 18f;  // separacion entre parrafos
     }
 
     // =====================================================================
@@ -745,8 +813,14 @@ public class ExperimentManagerASG : MonoBehaviour
     // =====================================================================
     public void TerminarExperimento()
     {
+        Debug.Log("[FIN] Boton Terminar presionado. Guardando resultados y cerrando...");
         SaveResults();
+#if UNITY_EDITOR
+        // En el editor Application.Quit() no hace nada; detenemos el modo Play para dar feedback.
+        UnityEditor.EditorApplication.isPlaying = false;
+#else
         Application.Quit();
+#endif
     }
 
     private bool resultsSaved = false;
@@ -760,7 +834,8 @@ public class ExperimentManagerASG : MonoBehaviour
         var data = new ExperimentDataASG(meta, calibrations, trials);
         string json = JsonUtility.ToJson(data, false);
 
-        string fileName = $"ResultadosASG_{DateTime.Now:yyyyMMdd_HHmmss}.json";
+        string idTag = string.IsNullOrWhiteSpace(studyId) ? "" : (studyId.Trim() + "_");
+        string fileName = $"ResultadosASG_{idTag}{DateTime.Now:yyyyMMdd_HHmmss}.json";
         string dir = Application.persistentDataPath;
 #if UNITY_EDITOR
         // en el editor: guardar en Descargas para encontrarlo fácil; en el visor real se usa persistentDataPath
@@ -846,6 +921,7 @@ public class TrialResultsASG
 public class ExperimentMetaASG
 {
     public string experiment_version;
+    public string study_id;
     public string timestamp_start;
     public string timestamp_end;
     public double duration_total_ms;
