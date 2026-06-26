@@ -1,4 +1,4 @@
-using UnityEngine;
+﻿using UnityEngine;
 using System.Collections.Generic;
 using Meta.XR;
 using Meta.XR.Editor.Id;
@@ -11,6 +11,7 @@ public class EyeTrackingLogger : MonoBehaviour
     public Transform rightEyeGaze;
     public bool trackingActive = false;
     public string currentStage = "undefined";
+    public bool debugGazeLog = true; // log en vivo del gaze en consola (apagar para grabar de verdad)
 
     //cconfiguracion canvas
     public float canvasDistance = 2.5f;
@@ -19,7 +20,7 @@ public class EyeTrackingLogger : MonoBehaviour
     public bool useFaceTrackingValidation = true;
     public float blinkThreshold = 0.5f;
 
-   //rayos
+    //rayos
     public bool showGazeRays = false;
     public LineRenderer leftEyeRay;
     public LineRenderer rightEyeRay;
@@ -95,7 +96,7 @@ public class EyeTrackingLogger : MonoBehaviour
         line.positionCount = 2;
         line.useWorldSpace = true;
 
- 
+
         Gradient gradient = new Gradient();
         gradient.SetKeys(
             new GradientColorKey[] { new GradientColorKey(color, 0.0f), new GradientColorKey(color, 1.0f) },
@@ -115,7 +116,7 @@ public class EyeTrackingLogger : MonoBehaviour
         if (useFaceTrackingValidation && IsBlinking())
         {
             if (showGazeRays) HideRays();
-            return; 
+            return;
         }
 
         //VECTORES ORIGNE Y DIRECCION
@@ -133,7 +134,7 @@ public class EyeTrackingLogger : MonoBehaviour
         Vector3 rightIntersection = CalculateCanvasIntersection(rightOrigin, rightDirection);
         Vector3 cyclopeanIntersection = CalculateCanvasIntersection(cyclopeanOrigin, cyclopeanDirection);
 
-        
+
         GazeSample sample = new GazeSample
         {
             timestamp = System.DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss.fff"),
@@ -153,6 +154,12 @@ public class EyeTrackingLogger : MonoBehaviour
         };
 
         currentSamples.Add(sample);
+
+        // LOG EN VIVO (verificación de eye-tracking en el visor): imprime 1 de cada 60 muestras.
+        // Si ves valores que CAMBIAN al mover los ojos -> el tracker funciona.
+        // Si siempre sale origin=(0,0,0) o intersection=(0,0,2.5) fijo -> NO llega gaze (revisar permiso por Link).
+        if (debugGazeLog && currentSamples.Count % 60 == 0)
+            Debug.Log($"[GAZE] origin={leftOrigin}  cyclopeanIntersection={cyclopeanIntersection}");
 
         if (showGazeRays)
         {
@@ -186,7 +193,7 @@ public class EyeTrackingLogger : MonoBehaviour
     void UpdateRayVisualization(Vector3 leftOrigin, Vector3 leftDir, Vector3 rightOrigin, Vector3 rightDir,
                                Vector3 cyclopeanOrigin, Vector3 cyclopeanDir)
     {
-        float rayLength = 3f; 
+        float rayLength = 3f;
 
         //rayo ojo izquierdo (rojo)
         leftEyeRay.SetPosition(0, leftOrigin);
@@ -196,7 +203,7 @@ public class EyeTrackingLogger : MonoBehaviour
         rightEyeRay.SetPosition(0, rightOrigin);
         rightEyeRay.SetPosition(1, rightOrigin + rightDir * rayLength);
 
-        //rayo ciclopeo (verde, m�s grueso)
+        //rayo ciclopeo (verde, m�s grueso)
         cyclopeanRay.SetPosition(0, cyclopeanOrigin);
         cyclopeanRay.SetPosition(1, cyclopeanOrigin + cyclopeanDir * rayLength);
 

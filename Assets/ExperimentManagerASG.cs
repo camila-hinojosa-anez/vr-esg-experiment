@@ -70,7 +70,7 @@ public class ExperimentManagerASG : MonoBehaviour
     public const string EXPERIMENT_VERSION = "VR_ASG_A1";
 
     // ---- estado interno ----
-    private readonly List<GazeSample> calibrationSamples = new List<GazeSample>();
+    private readonly List<CalibrationSegment> calibrations = new List<CalibrationSegment>();
     private readonly List<TrialResultsASG> trials = new List<TrialResultsASG>();
     private readonly Dictionary<string, Sprite> spriteCache = new Dictionary<string, Sprite>();
     private ExperimentMetaASG meta = new ExperimentMetaASG();
@@ -139,7 +139,7 @@ public class ExperimentManagerASG : MonoBehaviour
         if (runCalibration)
         {
             yield return StartCoroutine(ShowInstr("instrucciones_calibracion", "Calibracion"));
-            yield return StartCoroutine(Calibrate(false));
+            yield return StartCoroutine(Calibrate(false, "initial", 9, 0));
         }
 
         // ----- PRÁCTICA (ambas fases, juntas al inicio — orden canónico web/lab) -----
@@ -163,7 +163,7 @@ public class ExperimentManagerASG : MonoBehaviour
         if (runFase1 && runFase2)
         {
             yield return StartCoroutine(ShowInstr("instr_transicion_f2", "Fase 2"));
-            if (doRecalibration) yield return StartCoroutine(Calibrate(false));
+            if (doRecalibration) yield return StartCoroutine(Calibrate(false, "recal_3", 9, 25));
         }
 
         // ----- FASE 2 -----
@@ -240,8 +240,11 @@ public class ExperimentManagerASG : MonoBehaviour
             // recalibración rápida entre bloques (no después del último)
             if (doRecalibration && !isPractice && b < blockCsvs.Length - 1)
             {
+                string recalLabel; int afterT;
+                if (fase == 1) { recalLabel = (b == 0) ? "recal_1" : "recal_2"; afterT = (b == 0) ? 10 : 20; }
+                else           { recalLabel = (b == 0) ? "recal_4" : "recal_5"; afterT = (b == 0) ? 37 : 49; }
                 yield return StartCoroutine(ShowInstr("recal_rapida_intro", "Recalibracion - mira los puntos"));
-                yield return StartCoroutine(Calibrate(false));
+                yield return StartCoroutine(Calibrate(false, recalLabel, 5, afterT));
             }
         }
     }
@@ -477,7 +480,50 @@ public class ExperimentManagerASG : MonoBehaviour
         if (calibrationInstructionsPanel != null) calibrationInstructionsPanel.SetActive(false);
     }
 
-    private IEnumerator Calibrate(bool waitStart)
+    // Construye los targets sobre el plano-imagen.
+    // 9 = grilla 3x3 (completa) ; 5 = centro + 4 esquinas (rapida) ; 16 = rejilla 4x4 original de Victoria
+    private List<Vector3> BuildGrid(int pointCount)
+    {
+        Vector3 imageCenter = canvasCenter + imageOffset;
+        float hx = imageWidth / 2f;
+        float hy = imageHeight / 2f;
+        var pts = new List<Vector3>();
+
+        if (pointCount == 5)
+        {
+            pts.Add(imageCenter);                              // centro
+            pts.Add(imageCenter + new Vector3(-hx,  hy, 0));   // sup izq
+            pts.Add(imageCenter + new Vector3( hx,  hy, 0));   // sup der
+            pts.Add(imageCenter + new Vector3(-hx, -hy, 0));   // inf izq
+            pts.Add(imageCenter + new Vector3( hx, -hy, 0));   // inf der
+        }
+        else if (pointCount == 16)
+        {
+            int div = 4;
+            float stepX = imageWidth / (div - 1);
+            float stepY = imageHeight / (div - 1);
+            for (int ix = 0; ix < div; ix++)
+                for (int iy = 0; iy < div; iy++)
+                {
+                    float x = -hx + ix * stepX;
+                    float y = -hy + iy * stepY;
+                    pts.Add(imageCenter + new Vector3(x, y, 0));
+                }
+        }
+        else // 9 -> grilla 3x3
+        {
+            float[] xs = { -hx, 0f, hx };
+            float[] ys = {  hy, 0f, -hy };
+            foreach (float y in ys)
+                foreach (float x in xs)
+                    pts.Add(imageCenter + new Vector3(x, y, 0));
+        }
+        return pts;
+    }
+
+    // Una calibracion (inicial o recal). Guarda el CRUDO + el targetPosition por punto.
+    // La tecnologia de captura es la de Victoria; solo cambia que ahora se repite y se guarda con etiqueta.
+    private IEnumerator Calibrate(bool waitStart, string label, int pointCount, int afterTrial)
     {
         // ocultar estímulo/fixation/botones durante la calibración (importa en recalibraciones)
         if (imageComponent != null) imageComponent.enabled = false;
@@ -491,37 +537,40 @@ public class ExperimentManagerASG : MonoBehaviour
             yield return new WaitUntil(() => startClicked);
         }
 
-        // 16 esferas (rejilla 4x4) sobre el plano-imagen — lógica de Victoria, sin cambios
-        var targetPositions = new List<Vector3>();
-        int divisions = 4;
-        float stepX = imageWidth / (divisions - 1);
-        float stepY = imageHeight / (divisions - 1);
-        float[] xs = new float[divisions];
-        float[] ys = new float[divisions];
-        for (int i = 0; i < divisions; i++)
+        var segment = new CalibrationSegment
         {
-            xs[i] = -imageWidth / 2 + i * stepX;
-            ys[i] = -imageHeight / 2 + i * stepY;
-        }
-        Vector3 imageCenter = canvasCenter + imageOffset;
-        foreach (float x in xs)
-            foreach (float y in ys)
-                targetPositions.Add(imageCenter + new Vector3(x, y, 0));
+            label = label,
+            type = (pointCount == 5) ? "quick_5" : (pointCount == 16 ? "full_16" : "full_9"),
+            afterTrial = afterTrial,
+            points = new List<CalibrationPoint>()
+        };
+
+        List<Vector3> targetPositions = BuildGrid(pointCount);
 
         int target_index = 1;
         foreach (Vector3 target in targetPositions)
         {
             EyeTrackingLogger.Instance.trackingActive = true;
-            EyeTrackingLogger.Instance.currentStage = "target_" + target_index;
+            EyeTrackingLogger.Instance.currentStage = $"{label}_target_{target_index}";
 
             yield return StartCoroutine(ShowCalibrationSphere(target));
 
-            var sample = EyeTrackingLogger.Instance.EndAndReturnSamples();
-            calibrationSamples.AddRange(sample);
-            target_index++;
+            var raw = EyeTrackingLogger.Instance.EndAndReturnSamples();
             EyeTrackingLogger.Instance.trackingActive = false;
+
+            segment.points.Add(new CalibrationPoint
+            {
+                targetIndex = target_index,
+                targetPosition = target,   // el target real queda guardado
+                gazeSamples = raw          // crudo completo, sin promediar
+            });
+
+            target_index++;
             yield return new WaitForSeconds(0.5f);
         }
+
+        calibrations.Add(segment);
+        Debug.Log($"Calibracion '{label}' guardada: {segment.points.Count} puntos.");
     }
 
     private IEnumerator ShowCalibrationSphere(Vector3 position, float duration = 5f)
@@ -636,8 +685,8 @@ public class ExperimentManagerASG : MonoBehaviour
         meta.timestamp_end = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss");
         meta.duration_total_ms = (Time.realtimeSinceStartupAsDouble - expStartRealtime) * 1000.0;
 
-        var data = new ExperimentDataASG(meta, calibrationSamples, trials);
-        string json = JsonUtility.ToJson(data, true);
+        var data = new ExperimentDataASG(meta, calibrations, trials);
+        string json = JsonUtility.ToJson(data, false);
 
         string fileName = $"ResultadosASG_{DateTime.Now:yyyyMMdd_HHmmss}.json";
         string dir = Application.persistentDataPath;
@@ -736,13 +785,13 @@ public class ExperimentMetaASG
 public class ExperimentDataASG
 {
     public ExperimentMetaASG meta;
-    public CalibrationData calibration;   // reusa la clase de Victoria (ExperimentResults.cs)
+    public List<CalibrationSegment> calibrations;   // inicial + 5 recalibraciones (cada punto con target + crudo)
     public List<TrialResultsASG> trials;
 
-    public ExperimentDataASG(ExperimentMetaASG meta, List<GazeSample> calibrationSamples, List<TrialResultsASG> trials)
+    public ExperimentDataASG(ExperimentMetaASG meta, List<CalibrationSegment> calibrations, List<TrialResultsASG> trials)
     {
         this.meta = meta;
-        this.calibration = new CalibrationData { gazeSamples = calibrationSamples };
+        this.calibrations = calibrations;
         this.trials = trials;
     }
 }

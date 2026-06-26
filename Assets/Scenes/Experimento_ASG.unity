@@ -1026,7 +1026,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &77054370
 RectTransform:
   m_ObjectHideFlags: 0
@@ -1331,8 +1331,8 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 2135533603}
-        m_TargetAssemblyTypeName: UIImageChanger, Assembly-CSharp
+      - m_Target: {fileID: 2135533604}
+        m_TargetAssemblyTypeName: ExperimentManagerASG, Assembly-CSharp
         m_MethodName: PChosen
         m_Mode: 1
         m_Arguments:
@@ -5856,8 +5856,8 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 2135533603}
-        m_TargetAssemblyTypeName: ExperimentManager, Assembly-CSharp
+      - m_Target: {fileID: 2135533604}
+        m_TargetAssemblyTypeName: ExperimentManagerASG, Assembly-CSharp
         m_MethodName: ContinueActivity
         m_Mode: 1
         m_Arguments:
@@ -6433,8 +6433,8 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 2135533603}
-        m_TargetAssemblyTypeName: UIImageChanger, Assembly-CSharp
+      - m_Target: {fileID: 2135533604}
+        m_TargetAssemblyTypeName: ExperimentManagerASG, Assembly-CSharp
         m_MethodName: TerminarExperimento
         m_Mode: 1
         m_Arguments:
@@ -9654,8 +9654,8 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 2135533603}
-        m_TargetAssemblyTypeName: UIImageChanger, Assembly-CSharp
+      - m_Target: {fileID: 2135533604}
+        m_TargetAssemblyTypeName: ExperimentManagerASG, Assembly-CSharp
         m_MethodName: QChosen
         m_Mode: 1
         m_Arguments:
@@ -15487,8 +15487,8 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 2135533603}
-        m_TargetAssemblyTypeName: ExperimentManager, Assembly-CSharp
+      - m_Target: {fileID: 2135533604}
+        m_TargetAssemblyTypeName: ExperimentManagerASG, Assembly-CSharp
         m_MethodName: StartCalibration
         m_Mode: 1
         m_Arguments:
@@ -28410,7 +28410,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 2135533602}
-  - component: {fileID: 2135533603}
   - component: {fileID: 2135533604}
   m_Layer: 5
   m_Name: CanvasManager
@@ -28438,53 +28437,6 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 100, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
---- !u!114 &2135533603
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2135533601}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e054a2f860aa6d843be21f325e2233fe, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  imageComponent: {fileID: 1116146767}
-  activitiesSprites:
-  - {fileID: 21300000, guid: b2ea5a51b8de8b345b8ddbc9a41dc5ea, type: 3}
-  - {fileID: 21300000, guid: 2af99a3c658b884439b7dc0d43c0746a, type: 3}
-  - {fileID: 21300000, guid: 875752041dbdff0478be61f4b657bc6b, type: 3}
-  - {fileID: 21300000, guid: a99a15ef1d905e04f869469db4fd5bff, type: 3}
-  - {fileID: 21300000, guid: 50ff65ae4ea5bbb4294c0890e0f260e8, type: 3}
-  - {fileID: 21300000, guid: 23c7dfccded36f84fa59b4d8a0ccc1de, type: 3}
-  - {fileID: 21300000, guid: 25d8f8ee744dd754ea0f5dd147589e58, type: 3}
-  - {fileID: 21300000, guid: 8d2322fb22c1bbc44a82ea7136f8992c, type: 3}
-  - {fileID: 21300000, guid: 0754b8d8724c85948b5da92cdfcc6102, type: 3}
-  - {fileID: 21300000, guid: 347191e11da4c6d44bbb86eca64dc743, type: 3}
-  - {fileID: 21300000, guid: b3e91f72d9f82cf4bb94f9e1dcfb1fb5, type: 3}
-  - {fileID: 21300000, guid: ef2266096a508c048b76473ebc757e01, type: 3}
-  - {fileID: 21300000, guid: e3122a2a9f91ca24c8d0fefd634f11cf, type: 3}
-  - {fileID: 21300000, guid: 0770af0bb8af7fa46a8c3f973124615a, type: 3}
-  - {fileID: 21300000, guid: 732f5957395ad3a43a5164e64e7de499, type: 3}
-  - {fileID: 21300000, guid: 4483520f286d98040a28abf0ca4e8871, type: 3}
-  - {fileID: 21300000, guid: 63e2b6f9101a658499d493ce80add900, type: 3}
-  - {fileID: 21300000, guid: 7ed841c0acdc58043bdd31e2b6388650, type: 3}
-  - {fileID: 21300000, guid: 818a2b9c96275cb40844471adb7d4e6e, type: 3}
-  - {fileID: 21300000, guid: c8eae807abd73a740a0fe072b02e53e8, type: 3}
-  - {fileID: 21300000, guid: 66b9e451c5d739a4bbbfa2cf7a482d76, type: 3}
-  buttonP: {fileID: 88579886}
-  buttonQ: {fileID: 699264443}
-  panelMessage: {fileID: 1235651981}
-  textActivity: {fileID: 1489485794}
-  continueButton: {fileID: 417817374}
-  botonTerminar: {fileID: 458004042}
-  activityPanel: {fileID: 1505196061}
-  calibrationInstructionsPanel: {fileID: 77054369}
-  startCalibrationButton: {fileID: 1193419308}
-  calibrationSphere: {fileID: 168508983}
-  finishText: {fileID: 1790045547}
-  results: []
 --- !u!114 &2135533604
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -28508,11 +28460,11 @@ MonoBehaviour:
   calibrationSphere: {fileID: 168508983}
   botonTerminar: {fileID: 458004042}
   finishText: {fileID: 1790045547}
-  runCalibration: 0
+  runCalibration: 1
   runPractice: 1
   runFase1: 1
   runFase2: 1
-  doRecalibration: 0
+  doRecalibration: 1
   trialsPerBlockCap: 1
   devKeyboardInput: 1
   canvasCenter: {x: 0, y: 1.22, z: 2.5}

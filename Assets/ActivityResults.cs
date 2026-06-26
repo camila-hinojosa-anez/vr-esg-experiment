@@ -9,6 +9,7 @@ public class ActivityResults
     public string chosen;
     public string timestamp;
     public float timeToMakeDecision;
+    public string block = "";
     public List<GazeSample> gazeSamples;
 
 }
