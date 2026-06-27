@@ -28599,14 +28599,14 @@ MonoBehaviour:
   botonTerminar: {fileID: 458004042}
   finishText: {fileID: 1790045547}
   progressText: {fileID: 832615963}
-  studyId: PRUEBA01
-  runCalibration: 0
-  runPractice: 0
+  studyId: PRUEBA111
+  runCalibration: 1
+  runPractice: 1
   runFase1: 1
   runFase2: 1
   doRecalibration: 1
-  trialsPerBlockCap: 1
-  devKeyboardInput: 1
+  trialsPerBlockCap: 0
+  devKeyboardInput: 0
   canvasCenter: {x: 0, y: 1.22, z: 2.5}
   imageOffset: {x: 0, y: 0.081, z: 0}
   imageWidth: 1.5
